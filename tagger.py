@@ -1,22 +1,15 @@
-import os, mutagen
+import os, mutagen, shutil
 from mutagen.flac import Picture
 
 # Initial variables
 music_folder = os.path.abspath('.' + '/music')
 music_files = os.listdir(music_folder)
+music_files = [file for file in music_files if file.lower().endswith('.flac')]
 mutagen_files = []
 
-# Generate user-defined variables containing album information
-composer = input('Name of the composer:\n')
-artist = input('Name of the artist(s):\n')
-album = input('Name of the album:\n')
-year = input('Year of the recording:\n')
-genre = input('Genre of the album:\n').title()
-
 # Import TXT file containing track titles and store titles in a list
-with open('titles.txt', 'r') as file:
-    titles = file.readlines()
-    titles = [title.strip() for title in titles]
+with open('titles.txt', 'r', encoding='utf-8') as file:
+    titles = [line.strip() for line in file.readlines()]
     file.close()
 
 # Terminate program if no track titles have been imported
@@ -31,15 +24,23 @@ for file_name in music_files:
 
 # Ensure length of track titles list is equal to that of mutagen files list
 if len(titles) != len(mutagen_files):
-    print('ERROR: There are %s track titles for %s files' % (len(titles),
-                                                            len(mutagen_files)))
+    print('ERROR: There are %s track titles in titles.txt, for %s music files'
+          % (len(titles), len(mutagen_files)))
     quit()
+
+# Generate user-defined variables containing album information
+composer = input('Name of the composer:\n')
+artist = input('Name of the artist(s):\n')
+album = input('Name of the album:\n')
+year = input('Year of the recording:\n')
+genre = input('Genre of the album:\n').title()
+label = input('Name of recording label:\n')
 
 # Order list of music files by ascending track number
 mutagen_files.sort(key=lambda x: int(x['tracknumber'][0]))
 
 # Locate album artwork within folder (optional)
-art_input = input('Name of album artwork file excluding file extension: '\
+art_input = input('Name of album artwork file, excluding file extension: '\
                   '(optional)\n').lower()
 artwork_file = ''
 if art_input:
@@ -77,3 +78,24 @@ for file in mutagen_files:
         file.add_picture(artwork)
     track_number += 1
     file.save()
+
+# Specify default directory to move tagged files to
+default_dir = os.path.join(os.path.expanduser('~'), 'Music')
+
+# Define name of folder to contain tagged files
+folder_composer = composer.split()[-1]
+folder_album = [part.strip() for part in album.split('/')]
+folder_name = f'{folder_composer} - ' + ' - '.join(folder_album) + f' ({label})'
+
+# Create new folder in default directory
+new_dir = os.path.join(default_dir, folder_name)
+os.mkdir(new_dir)
+print('New folder name:\n%s' % folder_name)
+
+# Move tagged files to new folder
+for file in music_files:
+    old_path = os.path.join(music_folder, file)
+    shutil.move(old_path, new_dir)
+
+print('Tagging operation complete')
+print('%s tagged files moved to:\n%s' % (len(music_files), new_dir))

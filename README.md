@@ -28,3 +28,6 @@ file when prompted.
 Once the above steps are complete, run `tagger.py` and input your desired
 metadata tags. Currently supported tags are for the composer (also used for
 the "album artist" tag), artist(s), album name, year of recording, and genre.
+
+Tagged files will be automatically moved into a folder created in your
+`<home_path>/Music` directory.
