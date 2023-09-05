@@ -1,9 +1,55 @@
-import os, mutagen, shutil
+import os, json, mutagen, shutil
 from mutagen.flac import Picture
 
-# Initial variables
-music_folder = os.path.abspath('.' + '/music')
-music_files = os.listdir(music_folder)
+# Pull or generate folder paths for FLAC Tagger operation
+default_dir = os.path.join(os.path.expanduser('~'), 'Music')
+
+# Pull folder paths from a pre-existing 'paths.json' file
+if os.path.exists('paths.json'):
+    with open('paths.json', 'r') as file:
+        paths = json.load(file)
+        path_src = paths['source']
+        path_dest = paths['destination']
+        file.close()
+# Allow user specificiation of folder paths to be stored in 'paths.json' file
+else:
+    # Allow user-defined source folder to house FLAC files to be tagged
+    print('No JSON file detected containing folder path information')
+    paths = {}
+    path_src = input('Define path to permanent folder that will contain files '
+                     'to be tagged:\n(if no folder path is provided, a default '
+                     '"%s" directory will be used)\n' % default_dir)
+    if path_src:
+        os.makedirs(path_src, exist_ok=True)
+    else:
+        path_src = os.path.join(default_dir, 'Non-Tagged Files')
+        os.makedirs(path_src, exist_ok=True)
+    paths['source'] = path_src
+    print('Source folder created at:\n%s' % path_src)
+
+    # Allow user-defined destination folder for auto-created album folders
+    path_dest = input('Define path to permanent folder which will house the '
+                      'auto-generated folder containing tagged files:\n'
+                      '(if no folder path provided, the default "%s" '
+                      'directory will be used)\n' % default_dir)
+    if path_dest:
+        os.makedirs(path_dest, exist_ok=True)
+    else:
+        path_dest = default_dir
+    paths['destination'] = path_dest
+    print('Destination path specified as:\n%s' % path_dest)
+
+    # Save source and destination folder paths to 'paths.json' file
+    with open('paths.json', 'w') as file:
+        json_paths = json.dumps(paths)
+        file.write(json_paths)
+        file.close()
+    print('Created JSON with folder path information\nPlease place untagged '
+          'FLAC files into the "%s" folder and rerun FLAC Tagger' % path_src)
+    quit()
+
+# Initialise list variables to contain music file information
+music_files = os.listdir(path_src)
 music_files = [file for file in music_files if file.lower().endswith('.flac')]
 mutagen_files = []
 
@@ -19,7 +65,7 @@ if len(titles) == 0:
 
 # Initialise Mutagen music files and append to a list
 for file_name in music_files:
-    music_file = os.path.join(music_folder, file_name)
+    music_file = os.path.join(path_src, file_name)
     mutagen_files.append(mutagen.File(music_file))
 
 # Ensure length of track titles list is equal to that of mutagen files list
@@ -40,7 +86,7 @@ label = input('Name of recording label:\n')
 mutagen_files.sort(key=lambda x: int(x['tracknumber'][0]))
 
 # Locate album artwork within folder (optional)
-art_input = input('Name of album artwork file, excluding file extension: '\
+art_input = input('Name of album artwork file, excluding file extension: '
                   '(optional)\n').lower()
 artwork_file = ''
 if art_input:
@@ -79,22 +125,19 @@ for file in mutagen_files:
     track_number += 1
     file.save()
 
-# Specify default directory to move tagged files to
-default_dir = os.path.join(os.path.expanduser('~'), 'Music')
-
 # Define name of folder to contain tagged files
 folder_composer = composer.split()[-1]
 folder_album = [part.strip() for part in album.split('/')]
 folder_name = f'{folder_composer} - ' + ' - '.join(folder_album) + f' ({label})'
 
 # Create new folder in default directory
-new_dir = os.path.join(default_dir, folder_name)
+new_dir = os.path.join(path_dest, folder_name)
 os.mkdir(new_dir)
 print('New folder name:\n%s' % folder_name)
 
 # Move tagged files to new folder
 for file in music_files:
-    old_path = os.path.join(music_folder, file)
+    old_path = os.path.join(path_src, file)
     shutil.move(old_path, new_dir)
 
 print('Tagging operation complete')

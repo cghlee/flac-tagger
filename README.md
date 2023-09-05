@@ -8,11 +8,17 @@ amounts of classical music tracks (and especially opera) in a uniform fashion.
 FLAC Tagger requires the `Mutagen` module, with relevant documentation linked
 below:
 
-- [Mutagen module](https://pypi.org/project/mutagen/)
+- [Mutagen](https://pypi.org/project/mutagen/)
 
 ## How to Use
 
-Move FLAC files to be tagged into the `music` folder.
+On first run of `tagger.py`, either specify the path to a permanent source
+folder that will contain untagged files to be tagged, or use the specified
+defaults. Repeat this for the path of the destination folder which will
+contain the auto-created folder housing successfully tagged files.
+
+Move FLAC files to be tagged into the specified source path folder, and
+rerun FLAC Tagger.
 
 In the TXT file named `titles.txt`, list track titles in order of ascending
 track number, with one track title per line.
@@ -29,5 +35,5 @@ Once the above steps are complete, run `tagger.py` and input your desired
 metadata tags. Currently supported tags are for the composer (also used for
 the "album artist" tag), artist(s), album name, year of recording, and genre.
 
-Tagged files will be automatically moved into a folder created in your
-`<home_path>/Music` directory.
+Tagged files will be automatically moved into a created folder in the
+pre-specified destination folder directory.
