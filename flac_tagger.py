@@ -133,12 +133,12 @@ folder_name = f'{folder_composer} - ' + ' - '.join(folder_album) + f' ({label})'
 # Create new folder in default directory
 new_dir = os.path.join(path_dest, folder_name)
 os.mkdir(new_dir)
-print('New folder name:\n%s' % folder_name)
+print('\nNew folder name:\n%s' % folder_name)
 
 # Move tagged files to new folder
 for file in music_files:
     old_path = os.path.join(path_src, file)
     shutil.move(old_path, new_dir)
 
-print('Tagging operation complete')
-print('%s tagged files moved to:\n%s' % (len(music_files), new_dir))
+print('\nTagging operation complete')
+print('\n%s tagged files moved to:\n%s' % (len(music_files), new_dir))
