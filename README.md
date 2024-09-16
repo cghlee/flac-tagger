@@ -5,10 +5,11 @@ amounts of classical music tracks (and especially opera) in a uniform fashion.
 
 ## Dependencies
 
-FLAC Tagger requires the `Mutagen` module, with relevant documentation linked
-below:
+FLAC Tagger requires the `Mutagen` module, which can be installed via `venv` and
+the `requirements.txt` file provided. Relevant documentation is linked below:
 
 - [Mutagen](https://pypi.org/project/mutagen/)
+- [venv](https://docs.python.org/3/library/venv.html)
 
 ## How to Use
 
