@@ -77,7 +77,20 @@ if len(titles) != len(mutagen_files):
 # Generate user-defined variables containing album information
 composer = input('Name of the composer:\n')
 artist = input('Name of the artist(s):\n')
-album = input('Name of the album:\n')
+
+# Check for invalid characters in the given album name (which is used for the folder name)
+toggle_album_confirmed = False
+while not toggle_album_confirmed:
+    album = input('Name of the album:\n')
+    
+    chars_invalid = ['<', '>', ':', '"', '\\', '/' '|', '?', '*']
+    for char in chars_invalid:
+        if char in album:
+            print(f'\nInvalid character "{char}" in album name, please try again\n')
+            break
+    else:
+        toggle_album_confirmed = True
+
 year = input('Year of the recording:\n')
 genre = input('Genre of the album:\n').title()
 label = input('Name of recording label:\n')
@@ -99,7 +112,7 @@ if art_input:
 artwork = Picture()
 artwork.type = 3
 if artwork_file:
-    if artwork_file.endswith('jpg') or artwork_file.endswith('jpeg'):   
+    if artwork_file.endswith(('jpg', 'jpeg')): 
         artwork.mime = u'image/jpeg'
     elif artwork_file.endswith('png'):
         artwork.mime = u'image/png'
