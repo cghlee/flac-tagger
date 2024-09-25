@@ -76,30 +76,30 @@ if len(titles) != len(mutagen_files):
 
 # Generate user-defined variables containing album information
 composer = input('Name of the composer:\n')
-artist = input('Name of the artist(s):\n')
+artist = input('\nName of the artist(s):\n')
 
 # Check for invalid characters in the given album name (which is used for the folder name)
 toggle_album_confirmed = False
 while not toggle_album_confirmed:
-    album = input('Name of the album:\n')
+    album = input('\nName of the album:\n')
     
     chars_invalid = ['<', '>', ':', '"', '\\', '/' '|', '?', '*']
     for char in chars_invalid:
         if char in album:
-            print(f'\nInvalid character "{char}" in album name, please try again\n')
+            print(f'\nInvalid character "{char}" in album name, please try again')
             break
     else:
         toggle_album_confirmed = True
 
-year = input('Year of the recording:\n')
-genre = input('Genre of the album:\n').title()
-label = input('Name of recording label:\n')
+year = input('\nYear of the recording:\n')
+genre = input('\nGenre of the album:\n').title()
+label = input('\nName of recording label:\n')
 
 # Order list of music files by ascending track number
 mutagen_files.sort(key=lambda x: int(x['tracknumber'][0]))
 
 # Locate album artwork within folder (optional)
-art_input = input('Name of album artwork file, excluding file extension: '
+art_input = input('\nName of album artwork file, excluding file extension: '
                   '(optional)\n').lower()
 artwork_file = ''
 if art_input:
