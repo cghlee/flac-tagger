@@ -1,5 +1,7 @@
 # FLAC Tagger
 
+![Completion message after FLAC files are tagged by the FLAC Tagger](./flac_tagger.jpg?raw=true)
+
 A personal project to streamline the arduous process of tagging copious
 amounts of classical music tracks (and especially opera) in a uniform fashion.
 
