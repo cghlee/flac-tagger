@@ -1,6 +1,8 @@
+using FlacTagger.Controllers.Interfaces;
+
 namespace FlacTagger.Controllers;
 
-internal class TaggerController
+internal class TaggerController : ITaggerController
 {
     
 }
