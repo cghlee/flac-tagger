@@ -13,5 +13,7 @@ internal class Program
         TaggerService taggerService = new TaggerService(taggerRepository);
         TaggerController taggerController = new TaggerController(taggerService);
         TaggerView taggerView = new TaggerView(taggerController);
+
+        taggerView.Run();
     }
 }

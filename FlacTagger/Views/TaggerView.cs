@@ -10,4 +10,12 @@ internal class TaggerView : ITaggerView
     {
         _taggerController = taggerController;
     }
+
+    public void Run()
+    {
+        // Check for "filePaths.json" file
+        // If present, import JSON for file paths
+        // If not present, prompt for untagged file and output folders
+        // ...
+    }
 }
